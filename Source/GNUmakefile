@@ -228,6 +228,7 @@ NSDistributedNotificationCenter.m \
 NSEnergyFormatter.m \
 NSEnumerator.m \
 NSError.m \
+NSException.m \
 NSExtensionContext.m \
 NSExtensionItem.m \
 NSFileCoordinator.m \

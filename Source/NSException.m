@@ -145,8 +145,6 @@ GSPrivateBaseAddress(void *addr, void **base)
 #endif  /* USE_BFD */
 #else	/* _WIN32 */
 
-#include <dlfcn.h>
-
 #if	defined(USE_BFD)
 static NSString *
 GSPrivateBaseAddress(void *addr, void **base)
@@ -576,9 +574,7 @@ GSListModules()
 #if defined(WITH_UNWIND) && !defined(HAVE_BACKTRACE)
 
 #include <unwind.h>
-#if	!defined(_WIN32)
-#include <dlfcn.h>
-#endif
+
 
 struct GSBacktraceState
 {
@@ -1182,145 +1178,6 @@ GSPrivateReturnAddresses(NSUInteger **returns)
       NSInteger	        count = numReturns - FrameOffset;
       NSUInteger        i;
 
-#if	defined(USE_BFD)
-      void              **ptrs = (void**)&returns[FrameOffset];
-      NSMutableArray	*a;
-
-      a = [[NSMutableArray alloc] initWithCapacity: count];
-
-      for (i = 0; i < count; i++)
-        {
-          GSFunctionInfo	*aFrame = nil;
-          void		        *address = (void*)*ptrs++;
-          void		        *base;
-          NSString		*modulePath;
-          GSBinaryFileInfo	*bfi;
-
-          modulePath = GSPrivateBaseAddress(address, &base);
-          if (modulePath != nil && (bfi = GSLoadModule(modulePath)) != nil)
-            {
-              aFrame = [bfi functionForAddress: (void*)(address - base)];
-              if (aFrame == nil)
-                {
-                  /* We know we have the right module but function lookup
-                   * failed ... perhaps we need to use the absolute
-                   * address rather than offest by 'base' in this case.
-                   */
-                  aFrame = [bfi functionForAddress: address];
-                }
-            }
-          else
-            {
-              NSArray	*modules;
-              int	j;
-              int	m;
-
-              modules = GSListModules();
-              m = [modules count];
-              for (j = 0; j < m; j++)
-                {
-                  bfi = [modules objectAtIndex: j];
-
-                  if ((id)bfi != (id)[NSNull null])
-                    {
-                      aFrame = [bfi functionForAddress: address];
-                      if (aFrame != nil)
-                        {
-                          break;
-                        }
-                    }
-                }
-            }
-
-          // not found (?!), add an 'unknown' function
-          if (aFrame == nil)
-            {
-              aFrame = [GSFunctionInfo alloc];
-              [aFrame initWithModule: nil
-                             address: address 
-                                file: nil
-                            function: nil
-                                line: 0];
-              [aFrame autorelease];
-            }
-          [a addObject: [aFrame description]];
-        }
-      symbols = [a copy];
-      [a release];
-#elif	defined(_WIN32)
-      void              **ptrs = (void**)&returns[FrameOffset];
-      SYMBOL_INFO	*symbol;
-      NSString	        *syms[MAXFRAMES];
-
-      symbol = (SYMBOL_INFO *)calloc(sizeof(SYMBOL_INFO)
-        + 1024 * sizeof(char), 1);
-      symbol->MaxNameLen = 1024;
-      symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
-
-      GS_MUTEX_LOCK(traceLock);
-      for (i = 0; i < count; i++)
-        {
-          NSUInteger	addr = (NSUInteger)*ptrs++; 
-
-          if ((fromSym)(hProcess, (DWORD64)addr, 0, symbol))
-            {
-              syms[i] = [NSString stringWithFormat:
-                @"%s - %lx", symbol->Name, (unsigned long)addr];
-            }
-          else
-            {
-              syms[i] = [NSString stringWithFormat:
-                @"unknown - %lx", (unsigned long)addr];
-            }
-        }
-      GS_MUTEX_UNLOCK(traceLock);
-      free(symbol);
-
-      symbols = [[NSArray alloc] initWithObjects: syms count: count];
-#elif	defined(HAVE_BACKTRACE)
-      void              **ptrs = (void**)&returns[FrameOffset];
-      char		**strs;
-      NSString	        **symbolArray;
-
-      strs = backtrace_symbols(ptrs, count);
-      symbolArray = alloca(count * sizeof(NSString*));
-      for (i = 0; i < count; i++)
-        {
-          symbolArray[i] = [NSString stringWithUTF8String: strs[i]];
-        }
-      symbols = [[NSArray alloc] initWithObjects: symbolArray count: count];
-      free(strs);
-#elif defined(WITH_UNWIND)
-      void              **ptrs = (void**)&returns[FrameOffset];
-      NSString	        **symbolArray;
-
-      symbolArray = alloca(count * sizeof(NSString*));
-      for (i = 0; i < count; i++)
-        {
-          const void *addr = ptrs[i];
-          Dl_info info;
-          if (dladdr(addr, &info)) {
-            const char *libname = "unknown";
-            if (info.dli_fname) {
-              // strip library path
-              char *delim = strrchr(info.dli_fname, '/');
-              libname = delim ? delim + 1 : info.dli_fname;
-            }
-            if (info.dli_sname) {
-              symbolArray[i] = [NSString stringWithFormat:
-                @"%lu: %p %s %s + %d", (unsigned long)i, addr, libname,
-                info.dli_sname, (int)(addr - info.dli_saddr)];
-            } else {
-              symbolArray[i] = [NSString stringWithFormat:
-                @"%lu: %p %s unknown", (unsigned long)i, addr, libname];
-            }
-          } else {
-            symbolArray[i] = [NSString stringWithFormat:
-              @"%lu: %p unknown", (unsigned long)i, addr];
-          }
-        }
-      symbols = [[NSArray alloc] initWithObjects: symbolArray count: count];
-#else
       NSMutableArray	*a;
 
       symbols = a = [[self addresses] mutableCopy];
@@ -1333,7 +1190,6 @@ GSPrivateReturnAddresses(NSUInteger **returns)
           [a replaceObjectAtIndex: i withObject: s];
           RELEASE(s);
         }
-#endif
     }
   return symbols;
 }
