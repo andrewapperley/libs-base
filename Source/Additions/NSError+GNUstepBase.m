@@ -64,21 +64,21 @@ strerror_r(int eno, char *buf, int len)
   return result;
 }
 #else
-static int
-strerror_r(int eno, char *buf, int len)
-{
-  extern char  *sys_errlist[];
-  extern int    sys_nerr;
+// static int
+// strerror_r(int eno, char *buf, int len)
+// {
+//   extern char  *sys_errlist[];
+//   extern int    sys_nerr;
 
-  if (eno < 0 || eno >= sys_nerr)
-    {
-      strncpy(buf, "unknown error number", len - 1);
-      return -1;
-    }
-  strncpy(buf, sys_errlist[eno], len - 1);
-  buf[len - 1] = '\0';
-  return 0;
-}
+//   if (eno < 0 || eno >= sys_nerr)
+//     {
+//       strncpy(buf, "unknown error number", len - 1);
+//       return -1;
+//     }
+//   strncpy(buf, sys_errlist[eno], len - 1);
+//   buf[len - 1] = '\0';
+//   return 0;
+// }
 #endif
 #endif
 #endif

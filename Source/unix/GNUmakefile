@@ -31,8 +31,7 @@ include ../../config.mak
 SUBPROJECT_NAME = unix
 
 unix_OBJC_FILES = \
-	GSRunLoopCtxt.m \
-	NSStream.m \
+	GSRunLoopCtxt.m 
 
 -include Makefile.preamble
 

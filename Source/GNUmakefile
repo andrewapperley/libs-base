@@ -179,8 +179,6 @@ GSQuickSort.m \
 GSRunLoopWatcher.m \
 GSSet.m \
 GSShellSort.m \
-GSSocketStream.m \
-GSStream.m \
 GSString.m \
 GSTimSort.m \
 GSTLS.m \
@@ -230,12 +228,9 @@ NSDistributedNotificationCenter.m \
 NSEnergyFormatter.m \
 NSEnumerator.m \
 NSError.m \
-NSException.m \
 NSExtensionContext.m \
 NSExtensionItem.m \
 NSFileCoordinator.m \
-NSFileHandle.m \
-NSFileManager.m \
 NSFileVersion.m \
 NSFileWrapper.m \
 NSFormatter.m \
@@ -319,8 +314,6 @@ NSUserActivity.m \
 NSUserScriptTask.m \
 NSSerializer.m \
 NSSet.m \
-NSSocketPort.m \
-NSSocketPortNameServer.m \
 NSSortDescriptor.m \
 NSSpellServer.m \
 NSString.m \
@@ -363,10 +356,10 @@ objc-load.m
 ifneq ($(GNUSTEP_TARGET_OS), mingw32)
   ifneq ($(GNUSTEP_TARGET_OS), mingw64)
     ifneq ($(GNUSTEP_TARGET_OS), windows)
-      BASE_MFILES += \
-	GSFileHandle.m \
-	NSMessagePort.m \
-	NSMessagePortNameServer.m
+  #     BASE_MFILES += \
+	# GSFileHandle.m \
+	# NSMessagePort.m \
+	# NSMessagePortNameServer.m
     endif
   endif
 endif
@@ -604,12 +597,12 @@ $(GNUSTEP_TARGET_DIR)/config.h \
 $(GNUSTEP_TARGET_DIR)/GNUstepBase/GSConfig.h
 
 
-ifeq ($(HAVE_INET_PTON), no)
-GNU_MFILES += inet_pton.m
-endif
-ifeq ($(HAVE_INET_NTOP), no)
-GNU_MFILES += inet_ntop.m
-endif
+# ifeq ($(HAVE_INET_PTON), no)
+# GNU_MFILES += inet_pton.m
+# endif
+# ifeq ($(HAVE_INET_NTOP), no)
+# GNU_MFILES += inet_ntop.m
+# endif
 
 # The Objective-C source files to be compiled
 libgnustep-base_OBJC_FILES = $(GNU_MFILES) \

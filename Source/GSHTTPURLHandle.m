@@ -1647,7 +1647,7 @@ debugWrite(GSHTTPURLHandle *handle, NSData *data)
 #if     !defined(MSG_DONTWAIT)
 #define MSG_DONTWAIT    0
 #endif
-	  result = recv(fd, (void *)&c, 1, MSG_PEEK | MSG_DONTWAIT);
+	  result = recv(fd, (void *)&c, 1, 1);
 	  if (result == 0 || (result < 0 && errno != EAGAIN && errno != EINTR))
 	    {
 	      DESTROY(sock);

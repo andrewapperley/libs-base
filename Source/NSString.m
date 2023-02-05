@@ -5123,6 +5123,7 @@ static NSFileManager *fm = nil;
   #if defined(__GLIBC__) || defined(__FreeBSD__)
   #define GS_MAXSYMLINKS sysconf(_SC_SYMLOOP_MAX)
   #else
+  #define MAXSYMLINKS 20
   #define GS_MAXSYMLINKS MAXSYMLINKS
   #endif
  

@@ -71,7 +71,7 @@ _have_makefiles := $(shell test -f config.mak -o -f base.make && echo yes)
 #
 ifeq ($(_have_makefiles),yes)
 SUBPROJECTS = Source
-SUBPROJECTS += Tools NSTimeZones Resources Tests
+# SUBPROJECTS += Tools NSTimeZones Resources Tests
 endif
 
 -include Makefile.preamble

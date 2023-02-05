@@ -119,7 +119,7 @@ static inline void GSPThreadInitRecursiveMutex(pthread_mutex_t *x)
 {
   pthread_mutexattr_t recursiveAttributes;
   pthread_mutexattr_init(&recursiveAttributes);
-  pthread_mutexattr_settype(&recursiveAttributes, PTHREAD_MUTEX_RECURSIVE);
+  // pthread_mutexattr_settype(&recursiveAttributes, PTHREAD_MUTEX_RECURSIVE);
   pthread_mutex_init(x, &recursiveAttributes);
   pthread_mutexattr_destroy(&recursiveAttributes);
 }

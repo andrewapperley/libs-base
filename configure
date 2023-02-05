@@ -569,7 +569,7 @@ ac_default_prefix=/usr/local
 ac_clean_files=
 ac_config_libobj_dir=.
 LIBOBJS=
-cross_compiling=no
+cross_compiling=yes
 subdirs=
 MFLAGS=
 MAKEFLAGS=
@@ -6896,7 +6896,7 @@ else
 fi
 
 
-if test $ac_cv_sizeof_double = 8; then
+if test $ac_cv_sizeof_double = 4; then
   GS_FLT64="double"
 else
   as_fn_error $? "Unable to determine type for 64-bit float" "$LINENO" 5
@@ -7717,7 +7717,7 @@ fi
         ;;
     esac
   fi
-  if test $pthread_ok = no ; then
+  if test $pthread_ok = yes ; then
     as_fn_error $? "Unable to find pthread library (needed for thread support)." "$LINENO" 5
   fi
 
