@@ -130,3 +130,5 @@ the gstep-make package for more information on these options.
 are permitted in any medium without royalty provided the copyright
 notice and this notice are preserved.
 
+DC
+./configure --target=sh-elf --disable-libffi --disable-invocations --disable-ffcall --disable-xml --disable-tls --disable-icu --prefix=/opt/gnustep --enable-nxconstantstring --disable-iconv
