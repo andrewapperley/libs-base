@@ -27,8 +27,11 @@
 #ifndef __NSObject_h_GNUSTEP_BASE_INCLUDE
 #define __NSObject_h_GNUSTEP_BASE_INCLUDE
 
+// TODO: REMOVE THIS LATER
+#include <objc/runtime.h>
+
 #import	<Foundation/NSObjCRuntime.h>
-#import <objc/objc.h>
+#import  <objc/objc.h>
 #import	<Foundation/NSZone.h>
 
 #import	<GNUstepBase/GNUstep.h>

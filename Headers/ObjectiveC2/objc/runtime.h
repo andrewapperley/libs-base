@@ -1,4 +1,4 @@
-#ifndef __OBJECTIVEC2_RUNTIME_H_INCLUDED__
+#ifdef __OBJECTIVEC2_RUNTIME_H_INCLUDED__
 #define __OBJECTIVEC2_RUNTIME_H_INCLUDED__
 
 #ifdef HAVE_STDINT_H
@@ -31,19 +31,19 @@ __attribute__((error(x " not supported by the GNU runtime")))
 #  endif
 #endif
 
-// Undo GNUstep substitutions
-#ifdef class_setVersion
-#undef class_setVersion
-#endif
-#ifdef class_getClassMethod
-#undef class_getClassMethod
-#endif
-#ifdef objc_getClass
-#undef objc_getClass
-#endif
-#ifdef objc_lookUpClass
-#undef objc_lookUpClass
-#endif
+// // Undo GNUstep substitutions
+// #ifdef class_setVersion
+// #undef class_setVersion
+// #endif
+// #ifdef class_getClassMethod
+// #undef class_getClassMethod
+// #endif
+// #ifdef objc_getClass
+// #undef objc_getClass
+// #endif
+// #ifdef objc_lookUpClass
+// #undef objc_lookUpClass
+// #endif
 
 typedef struct objc_ivar* Ivar;
 

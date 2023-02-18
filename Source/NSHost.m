@@ -195,21 +195,22 @@ static id			null = nil;
               [n release];
             }
 
-          if (tmp->ai_addrlen > 0)
-            {
-              char      host[NI_MAXHOST];
-              char      port[NI_MAXSERV];
+// TODO: We need to add these NI_* values to KOS netdb.h
+        //   if (tmp->ai_addrlen > 0)
+        //     {
+        //       char      host[NI_MAXHOST];
+        //       char      port[NI_MAXSERV];
 
-              if (0 == getnameinfo(tmp->ai_addr, tmp->ai_addrlen,
-                host, NI_MAXHOST, port, NI_MAXSERV, NI_NUMERICSERV))
-                {
-                  NSString      *a;
+        //       if (0 == getnameinfo(tmp->ai_addr, tmp->ai_addrlen,
+        //         host, NI_MAXHOST, port, NI_MAXSERV, NI_NUMERICSERV))
+        //         {
+        //           NSString      *a;
 
-                  a = [[NSString alloc] initWithUTF8String: host];
-                  [addresses addObject: a];
-                  [a release];
-                }
-            }
+        //           a = [[NSString alloc] initWithUTF8String: host];
+        //           [addresses addObject: a];
+        //           [a release];
+        //         }
+        //     }
         }
       freeaddrinfo(entry);
       entry = 0;

@@ -1584,8 +1584,8 @@ else
 fi
 AC_SUBST(GS_FLT32)
 
-if test $ac_cv_sizeof_double = 8; then
-  GS_FLT64="double"
+if test $ac_cv_sizeof_double = 4; then
+  GS_FLT64="float"
 else
   AC_MSG_ERROR([Unable to determine type for 64-bit float])
 fi
@@ -1782,34 +1782,34 @@ if test $HAVE_WIN32_THREADS_AND_LOCKS = 0; then
   fi
   AC_CHECK_LIB(pthread, pthread_join, pthread_ok=yes, pthread_ok=no)
 
-  if test $pthread_ok = yes ; then
-    LIBS="$LIBS -lpthread"
-  else
-    case "$target_os" in
-      mingw*)
-        AC_CHECK_LIB(pthreadGC2, pthread_join, pthread_ok=yes, pthread_ok=no)
-        if test $pthread_ok = yes ; then
-          LIBS="$LIBS -lpthreadGC2"
-        fi
-        ;;
-      windows)
-        AC_CHECK_LIB(pthreadVC2, pthread_join, pthread_ok=yes, pthread_ok=no)
-        if test $pthread_ok = yes ; then
-          LIBS="$LIBS -lpthreadVC2"
-        fi
-        ;;
-      nto*|qnx*|*android*)
-        # Android and QNX have pthread in libc instead of libpthread
-        AC_CHECK_LIB(c, pthread_join, pthread_ok=yes, pthread_ok=no)
-        if test $pthread_ok = yes ; then
-           LIBS="$LIBS -lc"
-        fi
-        ;;
-    esac
-  fi
-  if test $pthread_ok = no ; then
-    AC_MSG_ERROR([Unable to find pthread library (needed for thread support).])
-  fi
+  # if test $pthread_ok = yes ; then
+  #   LIBS="$LIBS -lpthread"
+  # else
+  #   case "$target_os" in
+  #     mingw*)
+  #       AC_CHECK_LIB(pthreadGC2, pthread_join, pthread_ok=yes, pthread_ok=no)
+  #       if test $pthread_ok = yes ; then
+  #         LIBS="$LIBS -lpthreadGC2"
+  #       fi
+  #       ;;
+  #     windows)
+  #       AC_CHECK_LIB(pthreadVC2, pthread_join, pthread_ok=yes, pthread_ok=no)
+  #       if test $pthread_ok = yes ; then
+  #         LIBS="$LIBS -lpthreadVC2"
+  #       fi
+  #       ;;
+  #     nto*|qnx*|*android*)
+  #       # Android and QNX have pthread in libc instead of libpthread
+  #       AC_CHECK_LIB(c, pthread_join, pthread_ok=yes, pthread_ok=no)
+  #       if test $pthread_ok = yes ; then
+  #          LIBS="$LIBS -lc"
+  #       fi
+  #       ;;
+  #   esac
+  # fi
+  # if test $pthread_ok = no ; then
+  #   AC_MSG_ERROR([Unable to find pthread library (needed for thread support).])
+  # fi
 
   # Check threading extensions
   AC_CHECK_FUNCS(pthread_getthreadid_np pthread_main_np)

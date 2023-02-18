@@ -40,6 +40,8 @@
 #import "GSPrivate.h"
 #import "GSFastEnumeration.h"
 #import "GSDispatch.h"
+// TODO: REMOVE THIS LATER
+#include <objc/runtime.h>
 
 @class	GSSet;
 @interface GSSet : NSObject	// Help the compiler

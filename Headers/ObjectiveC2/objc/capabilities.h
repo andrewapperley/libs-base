@@ -12,7 +12,7 @@
  * although they are present in the header and understood by the runtime, they
  * may not be supported by the installed runtime.  
  */
-
+#undef OBJC_CAP_ARC
 /**
  * The runtime supports zero-cost exceptions.  
  */

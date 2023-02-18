@@ -56,12 +56,12 @@
  #define _C_ONEWAY   'V'
 #else				/* GNU Objective C Runtime */
  #include <objc/objc.h>
- #if defined (__GNU_LIBOBJC__)
+//  #if defined (__GNU_LIBOBJC__)
   #include <objc/runtime.h>
- #else
-  #include <objc/objc-api.h>
-  #include <objc/encoding.h>
- #endif
+//  #else
+//   #include <objc/objc-api.h>
+//   #include <objc/encoding.h>
+//  #endif
 #endif
 
 /*
@@ -75,15 +75,15 @@
 #define	_C_ULNG_LNG	'Q'
 #endif
 
-#if	OBJC2RUNTIME
+// #if	OBJC2RUNTIME
 /* We have a real ObjC2 runtime.
  */
 #include <objc/runtime.h>
-#else
-/* We emulate an ObjC2 runtime.
- */
-#include <ObjectiveC2/objc/runtime.h>
-#endif
+// #else
+// /* We emulate an ObjC2 runtime.
+//  */
+// #include <ObjectiveC2/objc/runtime.h>
+// #endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -83,7 +83,6 @@
 #endif
 #endif
 
-
 /* platforms which do not support weak */
 #if defined (__WIN32)
 #define WEAK_ATTRIBUTE

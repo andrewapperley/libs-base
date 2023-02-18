@@ -1636,6 +1636,7 @@ static NSMapTable	*absolutes = 0;
 	{
           localZoneSource = @"function: 'tzset()/tzname'";
 	  tzset();
+    bool daylight = 0;
 	  if (NULL != tzname[0] && '\0' != *tzname[0] && 0 == daylight)
 	    localZoneString = [NSString stringWithUTF8String: tzname[0]];
 	}

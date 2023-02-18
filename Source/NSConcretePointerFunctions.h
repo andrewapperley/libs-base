@@ -26,10 +26,11 @@
 #import	"Foundation/NSPointerFunctions.h"
 
 #ifdef __GNUSTEP_RUNTIME__
+#error "something went wrong"
 #  include <objc/capabilities.h>
 #endif
 
-#if defined(OBJC_CAP_ARC)
+#if 0
 #    include <objc/objc-arc.h>
 #    define ARC_WEAK_READ(x) objc_loadWeak((id*)x)
 #    define ARC_WEAK_WRITE(addr, x) objc_storeWeak((id*)addr, (id)x)
