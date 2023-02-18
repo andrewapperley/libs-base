@@ -131,4 +131,4 @@ are permitted in any medium without royalty provided the copyright
 notice and this notice are preserved.
 
 DC
-./configure --target=sh-elf --disable-libffi --disable-invocations --disable-ffcall --disable-xml --disable-tls --disable-icu --prefix=/opt/gnustep --enable-nxconstantstring --disable-iconv
+CC=kos-cc CXX=kos-c++ ./configure --target=sh-elf --disable-libffi --disable-invocations --disable-ffcall --disable-xml --disable-tls --disable-icu --prefix=/opt/gnustep --enable-nxconstantstring --disable-iconv
