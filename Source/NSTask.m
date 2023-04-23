@@ -1447,6 +1447,9 @@ quotedFromString(NSString *aString)
 BOOL
 GSPrivateCheckTasks()
 {
+  #ifdef __sh__
+    return;
+  #else
   BOOL	found = NO;
 
   if (YES == hadChildSignal)
@@ -1521,11 +1524,16 @@ GSPrivateCheckTasks()
       while (result > 0);
     }
   return found;
+  #endif
 }
 
 // 10.13 method...
 - (BOOL) launchAndReturnError: (NSError **)error
 {
+  #ifdef __sh__
+    return NO;
+  #endif
+
   NSMutableArray	*toClose;
   NSString      	*lpath;
   int			pid;
@@ -1793,6 +1801,9 @@ GSPrivateCheckTasks()
 
 - (void) _collectChild
 {
+  #ifdef __sh__
+    return;
+  #else
   if (_hasCollected == NO)
     {
       int result;
@@ -1827,10 +1838,14 @@ GSPrivateCheckTasks()
 	    }
 	}
     }
+  #endif
 }
 
 - (BOOL) usePseudoTerminal
 {
+  #ifdef __sh__
+    return NO;
+  #else
   int		desc;
   int		master;
   NSFileHandle	*fh;
@@ -1868,6 +1883,7 @@ GSPrivateCheckTasks()
   RELEASE(fh);
   _usePseudoTerminal = YES;
   return YES;
+  #endif
 }
 
 @end

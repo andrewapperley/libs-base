@@ -49,6 +49,9 @@ extern const char* WSAAPI inet_ntop(int, const void *, char *, size_t);
 extern int WSAAPI inet_pton(int , const char *, void *);
 #endif
 #else /* !_WIN32 */
+#ifdef __sh__
+  #include <kos/netcfg.h>
+#endif
 #include <netdb.h>
 #include <sys/param.h>
 #include <sys/socket.h>
@@ -371,7 +374,16 @@ myHostName()
   int			res;
 
   [_hostCacheLock lock];
-  res = gethostname(buf, GSMAXHOSTNAMELEN);
+  #ifndef __sh__
+    res = gethostname(buf, GSMAXHOSTNAMELEN);
+  #else
+    netcfg_t netconfig;
+    res = netcfg_load(&netconfig);
+    if(res == 0) { 
+        strcpy(buf, netconfig.hostname);
+    }
+  #endif
+  
   if (res < 0 || *buf == '\0')
     {
       NSLog(@"Unable to get name of current host - using 'localhost'");

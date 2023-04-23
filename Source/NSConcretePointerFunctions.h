@@ -26,7 +26,6 @@
 #import	"Foundation/NSPointerFunctions.h"
 
 #ifdef __GNUSTEP_RUNTIME__
-#error "something went wrong"
 #  include <objc/capabilities.h>
 #endif
 

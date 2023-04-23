@@ -1310,6 +1310,8 @@ static void determineOperatingSystem()
 
       GetSystemInfo(&info);
       return info.dwNumberOfProcessors;
+#elif defined(__sh__)
+      procCount = 1;
 #elif	defined(_SC_NPROCESSORS_CONF)
       procCount = sysconf(_SC_NPROCESSORS_CONF);
 #elif	defined(HAVE_SYSCTLBYNAME)
@@ -1375,6 +1377,8 @@ static void determineOperatingSystem()
 	}
     }
   return count;
+#elif defined(__sh__)
+  return 1;
 #elif	defined(_SC_NPROCESSORS_ONLN)
   return sysconf(_SC_NPROCESSORS_ONLN);
 #elif	defined(HAVE_SYSCTLBYNAME)
@@ -1408,6 +1412,9 @@ static void determineOperatingSystem()
       memory.dwLength = sizeof(memory);
       GlobalMemoryStatusEx(&memory);
       return memory.ullTotalPhys;
+#elif defined(__sh__)
+      NSLog(@"DREAMCAST DOESNT HAVE MEMORY");
+      availMem = 0;
 #elif	defined(_SC_PHYS_PAGES)
       availMem = sysconf(_SC_PHYS_PAGES) * NSPageSize();
 #elif	defined(HAVE_SYSCTLBYNAME)

@@ -73,6 +73,9 @@ static NSUInteger ns_page_size = 0;
 NSUInteger
 NSPageSize (void)
 {
+  #ifdef __sh__
+    ns_page_size = 4096;
+  #endif
   if (!ns_page_size)
     ns_page_size = getpagesize ();
   return ns_page_size;

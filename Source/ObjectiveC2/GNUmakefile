@@ -60,9 +60,9 @@ ifeq ($(CC), clang)
 #   ADDITIONAL_OBJCFLAGS = -fblocks
 endif
 
--include Makefile.preamble
+# -include Makefile.preamble
 
 include $(GNUSTEP_MAKEFILES)/subproject.make
 
--include Makefile.postamble
+# -include Makefile.postamble
 

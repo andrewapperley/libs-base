@@ -27,7 +27,7 @@ int main()
   
   obj1 = [NSProxy allocWithZone:testZone];
   PASS(obj1 != nil, "%s has working allocWithZone:",prefix);
-#ifndef OBJC_CAP_ARC
+#ifdef OBJC_CAP_ARC
   PASS(NSZoneFromPointer(obj1) == testZone, "%s uses zone for alloc",prefix);
   PASS([obj1 zone] == testZone, "%s -zone works",prefix);
 #endif

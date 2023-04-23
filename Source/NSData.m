@@ -1990,9 +1990,12 @@ failure:
           NSWarnMLog(@"mkstemp (%s) failed - %@", thePath, [NSError _last]);
           goto failure;
 	}
-      mask = umask(0);
-      umask(mask);
-      fchmod(desc, 0644 & ~mask);
+      #ifndef __sh__
+        mask = umask(0);
+        umask(mask);
+        fchmod(desc, 0644 & ~mask);
+      #endif
+      
       if ((theFile = fdopen(desc, "w")) == 0)
 	{
 	  close(desc);

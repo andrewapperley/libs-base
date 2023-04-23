@@ -61,10 +61,15 @@
 
 - (id) init
 {
+  #ifdef __sh__
+    self = nil;
+    return self;
+  #else
   self = [super init];
   if (self != nil)
     {
 #ifndef _WIN32
+
       int	p[2];
 
       if (pipe(p) == 0)
@@ -102,6 +107,7 @@
 #endif
     }
   return self;
+  #endif
 }
 
 /**

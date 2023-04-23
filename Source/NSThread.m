@@ -46,12 +46,24 @@ int pthread_spin_init(pthread_spinlock_t *lock, int pshared)
 #endif
   return 0;
 }
+static inline int reest_sync_bool_compare_and_swap(int* pValue, int old, int new) {
+    if(*pValue == old) { 
+        *pValue = new;
+        return 1;
+    } else {
+        return 0;
+    }
+}
 int pthread_spin_lock(pthread_spinlock_t *lock)
 {
 #if __has_builtin(__sync_bool_compare_and_swap)
   int count = 0;
   // Set the spin lock value to 1 if it is 0.
-  while(!__sync_bool_compare_and_swap(lock, 0, 1))
+  #if defined(__sh__)
+    while(!reest_sync_bool_compare_and_swap(lock, 0, 1))
+  #else
+    while(!__sync_bool_compare_and_swap(lock, 0, 1))
+  #endif
   {
     count++;
     if (0 == count % 10)
@@ -1949,7 +1961,7 @@ lockInfoErr(NSString *str)
       [NSException raise: NSInternalInconsistencyException
         format: @"Failed to create event to handle perform in thread"];
     }
-#else
+#elif !defined(__sh__)
   int	fd[2];
 
   if (pipe(fd) == 0)

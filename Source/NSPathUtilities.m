@@ -80,6 +80,10 @@
 #include <sys/types.h>
 #include <stdio.h>
 
+#ifdef __sh__
+  #include <unistd.h>
+#endif
+
 NSMutableDictionary* GNUstepConfig(NSDictionary *newConfig);
 
 void GNUstepUserConfig(NSMutableDictionary *config, NSString *userName);
@@ -1189,6 +1193,8 @@ static void InitialisePathUtilities(void)
 	  }
         gnustepUserID = [[NSString alloc] initWithUTF8String: str];
       }
+#elif defined(__sh__)
+  gnustepUserID = [[NSString alloc] initWithFormat: @"%d", (int)getpid()];
 #else
       gnustepUserID = [[NSString alloc] initWithFormat: @"%ld", (long)getuid()];
 #endif
@@ -1672,6 +1678,8 @@ NSUserName(void)
   static int	olduid = -1;
 #ifdef HAVE_GETEUID
   int uid = geteuid();
+#elif defined(__sh__)
+  int uid = getpid();
 #else
   int uid = getuid();
 #endif /* HAVE_GETEUID */

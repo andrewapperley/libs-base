@@ -139,7 +139,7 @@ BOOL	NSDeallocateZombies = NO;
 static Class		zombieClass = Nil;
 static NSMapTable	*zombieMap = 0;
 
-#ifndef OBJC_CAP_ARC
+#ifdef OBJC_CAP_ARC
 static void GSMakeZombie(NSObject *o, Class c)
 {
   object_setClass(o, zombieClass);
@@ -729,9 +729,8 @@ NSIncrementExtraRefCount(id anObject)
 #define	AREM(c, o)
 #endif
 
-
-#ifndef OBJC_CAP_ARC
 static SEL cxx_construct, cxx_destruct;
+// #ifdef OBJC_CAP_ARC
 
 /**
  * Calls the C++ constructors for this object, starting with the ones declared
@@ -764,7 +763,7 @@ callCXXConstructors(Class aClass, id anObject)
     }
   return constructor;
 }
-#endif
+// #endif
 
 
 /*
@@ -827,10 +826,10 @@ NSDeallocateObject(id anObject)
 
   if ((anObject != nil) && !class_isMetaClass(aClass))
     {
-#ifndef OBJC_CAP_ARC
+// #ifdef OBJC_CAP_ARC
       obj	o = &((obj)anObject)[-1];
       NSZone	*z = NSZoneFromPointer(o);
-#endif
+// #endif
 
       /* Call the default finalizer to handle C++ destructors.
        */
@@ -858,7 +857,7 @@ NSDeallocateObject(id anObject)
 	      object_setClass(anObject, zombieClass);
 	    }
 #else
-	  GSMakeZombie(anObject, aClass);
+	  // GSMakeZombie(anObject, aClass);
 	  if (NSDeallocateZombies == YES)
 	    {
 	      NSZoneFree(z, o);
@@ -970,7 +969,7 @@ static id gs_weak_load(id obj)
 #ifdef OBJC_CAP_ARC
   _objc_weak_load = gs_weak_load;
 #endif
-  objc_create_block_classes_as_subclasses_of(self);
+  // objc_create_block_classes_as_subclasses_of(self);
 }
 
 + (void) initialize
@@ -1376,7 +1375,7 @@ static id gs_weak_load(id obj)
 
 - (void) finalize
 {
-#ifndef OBJC_CAP_ARC
+#ifdef OBJC_CAP_ARC
   Class	destructorClass = Nil;
   IMP	  destructor = 0;
   /*

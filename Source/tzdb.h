@@ -1113,6 +1113,10 @@ tzloadbody(char const *name, struct state *sp, BOOL doextend,
 
 	sp->goback = sp->goahead = false;
 
+	#ifdef __sh__
+		return EINVAL;
+	#endif
+
 	if (! name) {
 		name = TZDEFAULT;
 		if (! name)

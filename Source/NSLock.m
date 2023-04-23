@@ -310,11 +310,13 @@ NSString *NSLockException = @"NSLockException";
        * (and deallocate the memory in pthread_mutexattr_destroy).
        */
       pthread_mutexattr_init(&attr_normal);
-      pthread_mutexattr_settype(&attr_normal, 0);
       pthread_mutexattr_init(&attr_reporting);
-      pthread_mutexattr_settype(&attr_reporting, 1);
       pthread_mutexattr_init(&attr_recursive);
-      pthread_mutexattr_settype(&attr_recursive, 2);
+      #ifndef __sh__
+        pthread_mutexattr_settype(&attr_normal, 0);
+        pthread_mutexattr_settype(&attr_reporting, 1);
+        pthread_mutexattr_settype(&attr_recursive, 2);
+      #endif
 #endif
 
       /* To emulate OSX behavior, we need to be able both to detect deadlocks
