@@ -969,7 +969,11 @@ static id gs_weak_load(id obj)
 #ifdef OBJC_CAP_ARC
   _objc_weak_load = gs_weak_load;
 #endif
-  // objc_create_block_classes_as_subclasses_of(self);
+#ifdef __sh__
+  printf("Figure out what to do here \n");
+#else
+  objc_create_block_classes_as_subclasses_of(self);
+#endif
 }
 
 + (void) initialize
