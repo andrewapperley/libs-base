@@ -57,7 +57,7 @@ PACKAGE_NAME = gnustep-base
 # The library to be compiled
 LIBRARY_NAME=
 ifeq ($(add),yes)
-LIBRARY_NAME += libgnustep-baseadd
+LIBRARY_NAME += libgnustep-base
 endif
 
 ifneq ($(base),no)
@@ -642,9 +642,9 @@ libgnustep-baseadd_NEEDS_GUI = NO
 # build Additions as a subproject, causing concurrency issues).  If it
 # can be guaranteed that they'll never be built together, this could
 # be removed.
-ifeq ($(OBJC2RUNTIME),0)
-SUBPROJECTS = ObjectiveC2
-endif
+# ifeq ($(OBJC2RUNTIME),0)
+# SUBPROJECTS = ObjectiveC2
+# endif
 SUBPROJECTS += Additions
 
 -include Makefile.preamble

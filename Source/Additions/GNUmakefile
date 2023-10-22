@@ -63,7 +63,7 @@ Additions_OBJC_FILES =\
 	NSString+GNUstepBase.m \
 	NSTask+GNUstepBase.m \
 	NSThread+GNUstepBase.m \
-	NSURL+GNUstepBase.m \
+	# NSURL+GNUstepBase.m \
 
 Additions_OBJC_FILES += Unicode.m
 
