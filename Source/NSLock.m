@@ -312,11 +312,9 @@ NSString *NSLockException = @"NSLockException";
       pthread_mutexattr_init(&attr_normal);
       pthread_mutexattr_init(&attr_reporting);
       pthread_mutexattr_init(&attr_recursive);
-      #ifndef __sh__
-        pthread_mutexattr_settype(&attr_normal, 0);
-        pthread_mutexattr_settype(&attr_reporting, 1);
-        pthread_mutexattr_settype(&attr_recursive, 2);
-      #endif
+      pthread_mutexattr_settype(&attr_normal, PTHREAD_MUTEX_NORMAL);
+      pthread_mutexattr_settype(&attr_reporting, PTHREAD_MUTEX_ERRORCHECK);
+      pthread_mutexattr_settype(&attr_recursive, PTHREAD_MUTEX_RECURSIVE);
 #endif
 
       /* To emulate OSX behavior, we need to be able both to detect deadlocks

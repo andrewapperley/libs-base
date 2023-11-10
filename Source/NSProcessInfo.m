@@ -242,8 +242,11 @@ static NSString *_androidCacheDir = nil;
  *************************************************************************/
 
 static void
-_gnu_process_args(int argc, char *argv[], char *env[])
+_gnu_process_args(int _argc, char *_argv[], char *_env[])
 {
+  int argc = 2;
+  char *argv[] = {"Dreamcast", "para1"};
+  char *env[] = {"env1", "env2", NULL};
   NSAutoreleasePool *arp = [NSAutoreleasePool new];
   NSString	*arg0 = nil;
   int i;
@@ -986,7 +989,6 @@ int main(int argc, char *argv[], char *env[])
          objc_getClass(STRINGIFY(NXConstantString)),
          sizeof(_NSConstantStringClassReference));
 #endif
-
   _gnu_process_args(argc, argv, env);
 
   /* Call the user defined main function */

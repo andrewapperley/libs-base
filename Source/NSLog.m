@@ -291,6 +291,7 @@ NSLog_printf_handler *_NSLog_printf_handler = _NSLog_standard_printf_handler;
 void
 NSLog(NSString* format, ...)
 {
+  return;
   va_list ap;
 
   va_start(ap, format);

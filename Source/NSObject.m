@@ -945,7 +945,184 @@ NSShouldRetainWithZone (NSObject *anObject, NSZone *requestedZone)
  *   instances and on class objects.
  * </p>
  */
+ struct exitLink {
+  struct exitLink	*next;
+  id			obj;	// Object to release or class for atExit
+  SEL			sel;	// Selector for atExit or 0 if releasing
+  id			*at;	// Address of static variable or NULL
+};
+
+static struct exitLink	*exited = 0;
+static BOOL		enabled = NO;
+static BOOL		shouldCleanUp = NO;
+static NSLock           *exitLock = nil;
+
+static inline void setup()
+{
+  if (nil == exitLock)
+    {
+      [gnustep_global_lock lock];
+      if (nil == exitLock)
+        {
+          exitLock = [NSLock new];
+        } 
+      [gnustep_global_lock unlock];
+    }
+}
+
+static void
+handleExit()
+{
+  BOOL  unknownThread = GSRegisterCurrentThread();
+  CREATE_AUTORELEASE_POOL(arp);
+
+  while (exited != 0)
+    {
+      struct exitLink	*tmp = exited;
+
+      exited = tmp->next;
+      if (0 != tmp->sel)
+	{
+	  Method	method;
+	  IMP		msg;
+
+	  method = class_getClassMethod(tmp->obj, tmp->sel);
+	  msg = method_getImplementation(method);
+	  if (0 != msg)
+	    {
+	      (*msg)(tmp->obj, tmp->sel);
+	    }
+	}
+      else if (YES == shouldCleanUp)
+	{
+	  if (0 != tmp->at)
+	    {
+	      tmp->obj = *(tmp->at);
+	      *(tmp->at) = nil;
+	    }
+	  [tmp->obj release];
+	}
+      free(tmp);
+    }
+  DESTROY(arp);
+  if (unknownThread == YES)
+    {
+      GSUnregisterCurrentThread();
+    }
+}
 @implementation NSObject
+
++ (id) leakAt: (id*)anAddress
+{
+  struct exitLink	*l;
+
+  l = (struct exitLink*)malloc(sizeof(struct exitLink));
+  l->at = anAddress;
+  l->obj = [*anAddress retain];
+  l->sel = 0;
+  setup();
+  [exitLock lock];
+  l->next = exited;
+  exited = l;
+  [exitLock unlock];
+  return l->obj;
+}
+
++ (id) leak: (id)anObject
+{
+  struct exitLink	*l;
+
+  l = (struct exitLink*)malloc(sizeof(struct exitLink));
+  l->at = 0;
+  l->obj = [anObject retain];
+  l->sel = 0;
+  setup();
+  [exitLock lock];
+  l->next = exited;
+  exited = l;
+  [exitLock unlock];
+  return l->obj;
+}
+
++ (BOOL) registerAtExit
+{
+  return [self registerAtExit: @selector(atExit)];
+}
+
++ (BOOL) registerAtExit: (SEL)sel
+{
+  Method		m;
+  Class			s;
+  struct exitLink	*l;
+
+  if (0 == sel)
+    {
+      sel = @selector(atExit);
+    }
+
+  m = class_getClassMethod(self, sel);
+  if (0 == m)
+    {
+      return NO;	// method not implemented.
+    }
+
+  s = class_getSuperclass(self);
+  if (0 != s && class_getClassMethod(s, sel) == m)
+    {
+      return NO;	// method not implemented in this class
+    }
+
+  setup();
+  [exitLock lock];
+  for (l = exited; l != 0; l = l->next)
+    {
+      if (l->obj == self && sel_isEqual(l->sel, sel))
+	{
+	  [exitLock unlock];
+	  return NO;	// Already registered
+	}
+    }
+  l = (struct exitLink*)malloc(sizeof(struct exitLink));
+  l->obj = self;
+  l->sel = sel;
+  l->at = 0;
+  l->next = exited;
+  exited = l;
+  if (NO == enabled)
+    {
+      atexit(handleExit);
+      enabled = YES;
+    }
+  [exitLock unlock];
+  return YES;
+}
+
++ (void) setShouldCleanUp: (BOOL)aFlag
+{
+  if (YES == aFlag)
+    {
+      setup();
+      [exitLock lock];
+      if (NO == enabled)
+	{
+	  atexit(handleExit);
+	  enabled = YES;
+	}
+      [exitLock unlock];
+      shouldCleanUp = YES;
+    }
+  else
+    {
+      shouldCleanUp = NO;
+    }
+}
+
++ (BOOL) shouldCleanUp
+{
+  return shouldCleanUp;
+}
+
+
 #if  defined(GS_ARC_COMPATIBLE)
 - (void)_ARCCompliantRetainRelease {}
 #endif
