@@ -53,7 +53,7 @@ typedef CONDITION_VARIABLE gs_cond_t;
 #define GS_MUTEX_INIT_RECURSIVE(x) gs_mutex_init(&(x), gs_mutex_attr_recursive)
 
 #define GS_MUTEX_LOCK(x) gs_mutex_lock(&(x))
-#define GS_MUTEX_TRYLOCK(x) gs_mutex_trylock(&(x))
+#define GS_MUTEX_TRYLOCK(x) gs_mutex_lock(&(x))
 #define GS_MUTEX_UNLOCK(x) gs_mutex_unlock(&(x))
 #define GS_MUTEX_DESTROY(x)
 

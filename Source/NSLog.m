@@ -291,7 +291,6 @@ NSLog_printf_handler *_NSLog_printf_handler = _NSLog_standard_printf_handler;
 void
 NSLog(NSString* format, ...)
 {
-  return;
   va_list ap;
 
   va_start(ap, format);
@@ -334,7 +333,7 @@ NSLogv(NSString* format, va_list args)
 {
   NSMutableString	*prefix;
   NSString              *message;
-  NSString              *threadName = nil;
+  NSString              *threadName = @"main";
   NSThread              *t = nil;
   /* NB. On systems like Android where there is no operating system thread
    * ID available, the value returned by GSPrivateThreadID() should actually
@@ -357,14 +356,14 @@ NSLogv(NSString* format, va_list args)
 #endif
     }
 
-  if (GSPrivateDefaultsFlag(GSLogThread) == YES)
-    {
-      /* If no name has been set for the current thread,
-       * we log the address of the NSThread object instead.
-       */
-      t = GSCurrentThread();
-      threadName = [t name];
-    }
+  // if (GSPrivateDefaultsFlag(GSLogThread) == YES)
+  //   {
+  //     /* If no name has been set for the current thread,
+  //      * we log the address of the NSThread object instead.
+  //      */
+  //     t = GSCurrentThread();
+  //     threadName = [t name];
+  //   }
 
   prefix = [[NSMutableString alloc] initWithCapacity: 1000];
 
@@ -390,21 +389,21 @@ NSLogv(NSString* format, va_list args)
   else
 #endif
     {
-      NSString  *fmt;
-      NSString  *cal;
+      //NSString  *fmt;
+      //NSString  *cal;
 
-      if (GSPrivateDefaultsFlag(GSLogOffset) == YES)
-        {
-          fmt = @"%Y-%m-%d %H:%M:%S.%F %z";
-        }
-      else
-        {
-          fmt = @"%Y-%m-%d %H:%M:%S.%F";
-        }
-      cal = [[NSCalendarDate calendarDate] descriptionWithCalendarFormat: fmt];
+     // if (GSPrivateDefaultsFlag(GSLogOffset) == YES)
+       // {
+        //  fmt = @"%Y-%m-%d %H:%M:%S.%F %z";
+      //  }
+      //else
+        //{
+         // fmt = @"%Y-%m-%d %H:%M:%S.%F";
+       // }
+      //cal = [[NSCalendarDate calendarDate] descriptionWithCalendarFormat: fmt];
 
-      [prefix appendString: cal];
-      [prefix appendString: @" "];
+      //[prefix appendString: cal];
+      //[prefix appendString: @" "];
       [prefix appendString: [[NSProcessInfo processInfo] processName]];
       if (nil == t || ((NSThread*)tid == t && nil == threadName))
         {
