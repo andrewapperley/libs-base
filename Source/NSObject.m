@@ -1147,7 +1147,7 @@ static id gs_weak_load(id obj)
   _objc_weak_load = gs_weak_load;
 #endif
 #ifdef __sh__
-  printf("Figure out what to do here \n");
+  //#TODO fix this
 #else
   objc_create_block_classes_as_subclasses_of(self);
 #endif

@@ -652,6 +652,7 @@ static void setPollfd(int fd, int event, GSRunLoopCtxt *ctxt)
 
 - (BOOL) pollUntil: (int)milliseconds within: (NSArray*)contexts
 {
+	return YES; // This is because the file system isn't ready to be polled on DC
   GSRunLoopThreadInfo   *threadInfo = GSRunLoopInfoForThread(nil);
   struct timeval	timeout;
   void			*select_timeout;
